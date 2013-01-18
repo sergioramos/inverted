@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "name": "inverted-index",
+  "author": "Sérgio Ramos <mail@sergioramos.me>",
+  "description": "levelup based inverted index",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kordon/inverted.git"
+  },
+  "keywords": [
+    "inverted",
+    "index",
+    "levelup",
+    "leveldb"
+  ],
+  "scripts": {
+    "test": "node_modules/.bin/mocha -u qunit -R spec"
+  },
+  "main": "src/inverted.js",
+  "dependencies": {
+    "levelup": "0.5.x"
+  },
+  "devDependencies": {
+    "sgen": "0.1.x",
+    "chai": "1.4.x",
+    "mocha": "1.8.x"
+  }
+}
