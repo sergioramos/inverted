@@ -17,24 +17,24 @@ npm install [--save/--save-dev] inverted-index
 
 ### index
 
-|     WORD     |  PAGES  |
-| :----------: | :-----: |
-| `adipiscing` |   `2`   |
-|   `aliquam`  |  `1, 2` |
-|   `blandit`  |  `1, 2` |
-|    `eget`    |   `2`   |
-|    `elit`    |   `1`   |
-|    `erat`    |   `2`   |
-|    `eros`    |   `2`   |
-|     `est`    |  `1, 2` |
-|     `eu`     |   `1`   |
-|  `malesuada` |   `1`   |
-|    `morbi`   |  `1, 2` |
-|     `nec`    |   `1`   |
-|    `quis`    |   `2`   |
-|   `turpis`   |   `1`   |
-|     `ut`     |   `1`   |
-|  `vehicula`  |   `2`   |
+|     WORD     |   PAGES   |
+| :----------: | :-------: |
+| `adipiscing` |    `2`    |
+|   `aliquam`  |  `1`, `2` |
+|   `blandit`  |  `1`, `2` |
+|    `eget`    |    `2`    |
+|    `elit`    |    `1`    |
+|    `erat`    |    `2`    |
+|    `eros`    |    `2`    |
+|     `est`    |  `1`, `2` |
+|     `eu`     |    `1`    |
+|  `malesuada` |    `1`    |
+|    `morbi`   |  `1`, `2` |
+|     `nec`    |    `1`    |
+|    `quis`    |    `2`    |
+|   `turpis`   |    `1`    |
+|     `ut`     |    `1`    |
+|  `vehicula`  |    `2`    |
 
 ## api
 
