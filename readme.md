@@ -102,7 +102,11 @@ index.close(function (e) {
 })
 ```
 
-## test [![Build Status](https://travis-ci.org/kordon/inverted.png)](https://travis-ci.org/kordon/inverted)
+## test
+
+[![Build Status](https://travis-ci.org/kordon/inverted.png)](https://travis-ci.org/kordon/inverted) 
+
+[100% coverage 42 SLOC](http://f.cl.ly/items/2Z080D3s403k103J1745/coverage.html) 
 
 ```bash
 npm test
