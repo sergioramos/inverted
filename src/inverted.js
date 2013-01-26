@@ -25,7 +25,7 @@ inverted.prototype.startsWith = function (key) {
   var stream = this.engine.readStream({start: key})
   
   return stream.pipe(through(function (data) {
-    if(!data.key.indexOf(key) == 0) return stream.destroy()
+    if(data.key.indexOf(key) !== 0) return stream.destroy()
     this.emit('data', data)
   }, function () {
     this.emit('end')
