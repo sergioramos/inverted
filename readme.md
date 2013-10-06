@@ -1,5 +1,12 @@
 # inverted
 
+[level](https://github.com/level/level) based inverted index
+
+[![NPM version](https://badge.fury.io/js/inverted-index.png)](http://badge.fury.io/js/inverted-index)
+[![Build Status](https://secure.travis-ci.org/kordon/inverted.png)](http://travis-ci.org/kordon/inverted)
+[![Dependency Status](https://gemnasium.com/kordon/inverted.png)](https://gemnasium.com/kordon/inverted)
+[![Coverage Status](https://coveralls.io/repos/kordon/inverted/badge.png?branch=master)](https://coveralls.io/r/kordon/inverted?branch=master)
+
 ## install
 
 ```bash
@@ -42,8 +49,11 @@ npm install [--save/--save-dev] inverted-index
 
 ```js
 var inverted = require('inverted-index')
-
-var index = inverted(__dirname)
+var index = inverted(level(__dirname, {
+  createIfMissing: true,
+  valueEncoding: 'json',
+  keyEncoding: 'utf8'
+}))
 ```
 
 #### `void` put(`array`: values, `int`/`string`: key, `function`: callback)
@@ -100,16 +110,6 @@ index.startsWith('e', function (data) {
 index.close(function (e) {
   assert(!e)
 })
-```
-
-## test
-
-[![Build Status](https://travis-ci.org/kordon/inverted.png)](https://travis-ci.org/kordon/inverted) 
-
-[100% coverage 42 SLOC](http://f.cl.ly/items/2Z080D3s403k103J1745/coverage.html) 
-
-```bash
-npm test
 ```
 
 ## license

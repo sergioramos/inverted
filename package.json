@@ -20,14 +20,17 @@
   "main": "src/inverted.js",
   "dependencies": {
     "type-component": "0.0.x",
-    "through": "2.1.x",
-    "levelup": "0.5.x",
-    "lodash": "1.0.x",
-    "async": "0.1.x"
+    "through": "2.3.x",
+    "lodash": "2.2.x",
+    "async": "0.2.x"
   },
   "devDependencies": {
-    "levelup-cursor": "0.3.x",
-    "mocha": "1.8.x",
-    "chai": "1.4.x"
+    "mocha-lcov-reporter": "0.0.x",
+    "jscoverage": "0.3.x",
+    "level-cursor": "0.5.x",
+    "coveralls": "2.3.x",
+    "level": "0.17.x",
+    "mocha": "1.13.x",
+    "chai": "1.8.x"
   }
 }

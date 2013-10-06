@@ -3,8 +3,8 @@ else var inverted = require('../')
 
 var type = require('type-component'),
     assert = require('chai').assert,
-    levelup = require('levelup'),
     crypto = require('crypto'),
+    level = require('level'),
     async = require('async'),
     path = require('path')
 
@@ -24,7 +24,11 @@ module.exports.error = function (e) {
 // create and return a new levelup instance
 module.exports.index = function () {
   assert(type(inverted) == 'function')
-  return inverted(path.join(dbs, hash()))
+  return inverted(level(path.join(dbs, hash()), {
+    createIfMissing: true,
+    valueEncoding: 'json',
+    keyEncoding: 'utf8'
+  }))
 }
 
 module.exports.fill = function (index, data, callback) {

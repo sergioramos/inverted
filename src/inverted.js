@@ -1,11 +1,12 @@
 var without = require('lodash').without,
     through = require('through'),
-    levelup = require('levelup'),
     async = require('async'),
     path = require('path'),
     put = require('./put')
 
-var inverted = function (engine) {
+var inverted = module.exports = function (engine) {
+  if(!(this instanceof inverted)) return new inverted(engine)
+  
   this.queue = async.queue(put.bind(this), 1)
   this.engine = engine
 }
@@ -50,14 +51,4 @@ inverted.prototype.del = function (values, key, callback) {
 
 inverted.prototype.close = function (callback) {
   this.engine.close(callback)
-}
-
-module.exports = function (location) {
-  var db = levelup(path.normalize(location), {
-    createIfMissing: true,
-    valueEncoding: 'json',
-    keyEncoding: 'utf8'
-  })
-
-  return new inverted(db)
 }

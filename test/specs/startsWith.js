@@ -2,7 +2,7 @@ if(process.env['INVERTED_COV']) var inverted = require('../../src-cov/inverted')
 else var inverted = require('../../')
 
 var difference = require('lodash').difference,
-    cursor = require('levelup-cursor'),
+    cursor = require('level-cursor'),
     expect = require('chai').expect,
     utils = require('../utils'),
     async = require('async'),
