@@ -404,7 +404,7 @@ inverted.prototype.parseText = function(text, idf){
     return word.toLowerCase()
   }).filter(Boolean)
 
-  if(self.options.stem) words.forEach(function(word){
+  if(self.options.stem) words = words.map(function(word){
     return stemmer.stem(word)
   })
 

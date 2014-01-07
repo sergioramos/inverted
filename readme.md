@@ -54,20 +54,73 @@ When `idf` is flagged as true, for each token indexed an `idf` ([term frequencyâ
 ```json
 [
   {
-    "word": "loves",
-    "idf": 1.0986122886681098
-  },
-  {
     "word": "julie",
     "idf": 1.791759469228055
   },
   {
     "word": "linda",
     "idf": 1.791759469228055
+  },
+  {
+    "word": "loves",
+    "idf": 1.0986122886681098
   }
 ]
 ```
 
 Notice that *"me"*, *"more"* and *"than"* are not indexed, because those are considered `stopwords`.
+
+##### stem
+
+Whether the text should be [stemmed](http://en.wikipedia.org/wiki/Stemming) or not. When true, the text is stemmed with [the Porter stemming algorithm](http://snowball.tartarus.org/algorithms/porter/stemmer.html) using [NaturalNode/natural](https://github.com/NaturalNode/natural#stemmers). Example:
+
+```js
+"Fishing is a way of catching cats, he argued in his arguments"
+```
+is tokenized into:
+```json
+["fishing", "is", "a", "way", "of", "catching", "cats", "he", "argued", "in", "his", "arguments"]
+```
+and stemmed into:
+```json
+["fish", "is", "a", "wai", "of", "catch", "cat", "he", "argued", "in", "his", "argum"]
+```
+
+##### rank
+
+With ranking enabled, when querying it ranks the results based on a defined algorithm. The rank is done AFTER the fetch, so it only ranks using the result set (that can be parcial depending on the size of matching results) comparing the query with the original indexed text, to the tokens.
+
+So, `idf` is used to fetch tokens ordered by `idf` and then ranking is done with the original text of each token's correspondent document comparing with the query text. The "problem" with ranking is that if you have 100000 tokens that match the query tokens, only `100` (can be set on the query options) are fetched for each page and THEN the rank is done. Example:
+
+```json
+{
+  "1": "Fishing is a way of catching cats, Julie argued in her arguments",
+  "2": "Julie loves me more than Linda loves me"
+}
+```
+querying `Julie loves` would fetch:
+```json
+[
+  {
+    "word": "loves",
+    "idf": 1.0986122886681098,
+    "id": "2"
+  },
+  {
+    "word": "julie",
+    "idf": 1.791759469228055,
+    "id": "2"
+  },
+  {
+    "word": "julie",
+    "idf": 2.4849066497880004,
+    "id": "1"
+  }
+]
+```
+and then rank them:
+```json
+["2", "1"]
+```
 
 ## license
