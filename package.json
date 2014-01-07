@@ -1,36 +1,51 @@
 {
-  "version": "0.1.1",
   "name": "inverted-index",
-  "author": "Sérgio Ramos <mail@sergioramos.me>",
-  "description": "levelup based inverted index",
-  "license": "MIT",
+  "version": "0.0.1",
+  "description": "full-text search engine for level with pagination, sift3/cosine distance and tf-idf ranking",
+  "keywords": [],
+  "homepage": "https://github.com/ramitos/inverted-index",
+  "bugs": {
+    "url": "http://github.com/ramitos/inverted-index/issues",
+    "email": "mail@sergioramos.me"
+  },
+  "license": {
+    "url": "https://raw.github.com/ramitos/inverted-index/master/license",
+    "type": "MIT"
+  },
+  "author": "Sérgio Ramos <mail@sergioramos.me> (http://sergioramos.me)",
+  "main": "src/inverted-index.js",
+  "directories": {
+    "lib": "src"
+  },
   "repository": {
     "type": "git",
-    "url": "git://github.com/kordon/inverted.git"
+    "url": "git://github.com/ramitos/inverted-index.git"
   },
-  "keywords": [
-    "inverted",
-    "levelup",
-    "leveldb",
-    "index"
-  ],
   "scripts": {
-    "test": "make test"
+    "test": "make test test-coveralls"
   },
-  "main": "src/inverted.js",
   "dependencies": {
-    "type-component": "0.0.x",
-    "through": "2.3.x",
-    "lodash": "2.2.x",
-    "async": "0.2.x"
+    "sift3": "0.0.1",
+    "level-path": "~1.0.0",
+    "natural": "~0.1.25",
+    "lodash.uniq": "~2.4.1",
+    "type-component": "0.0.1",
+    "async": "~0.2.9",
+    "bytewise": "~0.7.0",
+    "through2": "~0.3.0",
+    "atomic": "0.0.2",
+    "xtend": "~2.1.2",
+    "timehat": "0.0.1",
+    "level-ttl": "~0.5.0",
+    "level-sublevel": "~5.2.0",
+    "cosine": "0.0.1"
   },
   "devDependencies": {
-    "mocha-lcov-reporter": "0.0.x",
-    "jscoverage": "0.3.x",
-    "level-cursor": "0.5.x",
-    "coveralls": "2.3.x",
-    "level": "0.17.x",
-    "mocha": "1.13.x",
-    "chai": "1.8.x"
+    "level": "~0.18.0",
+    "longjohn": "~0.2.2",
+    "stats-lite": "~1.0.0"
+  },
+  "engines": {
+    "node": ">=0.8"
   }
 }

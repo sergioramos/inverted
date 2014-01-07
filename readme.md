@@ -1,11 +1,11 @@
-# inverted
+WIP
 
-[level](https://github.com/level/level) based inverted index
+# inverted-index
 
 [![NPM version](https://badge.fury.io/js/inverted-index.png)](http://badge.fury.io/js/inverted-index)
-[![Build Status](https://secure.travis-ci.org/kordon/inverted.png)](http://travis-ci.org/kordon/inverted)
-[![Dependency Status](https://gemnasium.com/kordon/inverted.png)](https://gemnasium.com/kordon/inverted)
-[![Coverage Status](https://coveralls.io/repos/kordon/inverted/badge.png?branch=master)](https://coveralls.io/r/kordon/inverted?branch=master)
+[![Build Status](https://secure.travis-ci.org/ramitos/inverted-index.png)](http://travis-ci.org/ramitos/inverted-index)
+[![Dependency Status](https://gemnasium.com/ramitos/inverted-index.png)](https://gemnasium.com/ramitos/inverted-index)
+[![Coverage Status](https://coveralls.io/repos/ramitos/inverted-index/badge.png?branch=master)](https://coveralls.io/r/ramitos/inverted-index?branch=master)
 
 ## install
 
@@ -13,105 +13,54 @@
 npm install [--save/--save-dev] inverted-index
 ```
 
-## example
-
-### dataset
-
-|  PAGE  |                                TEXT                                |
-| :----: | :----------------------------------------------------------------: |
-|   `1`  |    Morbi elit est, blandit eu aliquam nec, malesuada ut turpis.    |
-|   `2`  | Morbi blandit eros quis erat adipiscing eget vehicula est aliquam. |
-
-### index
-
-|     WORD     |   PAGES   |
-| :----------: | :-------: |
-| `adipiscing` |    `2`    |
-|   `aliquam`  |  `1`, `2` |
-|   `blandit`  |  `1`, `2` |
-|    `eget`    |    `2`    |
-|    `elit`    |    `1`    |
-|    `erat`    |    `2`    |
-|    `eros`    |    `2`    |
-|     `est`    |  `1`, `2` |
-|     `eu`     |    `1`    |
-|  `malesuada` |    `1`    |
-|    `morbi`   |  `1`, `2` |
-|     `nec`    |    `1`    |
-|    `quis`    |    `2`    |
-|   `turpis`   |    `1`    |
-|     `ut`     |    `1`    |
-|  `vehicula`  |    `2`    |
-
 ## api
-
-### `index` inverted(`string`: path)
-
-```js
-var inverted = require('inverted-index')
-var index = inverted(level(__dirname, {
-  createIfMissing: true,
-  valueEncoding: 'json',
-  keyEncoding: 'utf8'
-}))
-```
-
-#### `void` put(`array`: values, `int`/`string`: key, `function`: callback)
-
-```js
-var text = 'Morbi elit est, blandit eu aliquam nec, malesuada ut turpis.'
-var page = 1
-
-index.put(text.toLowerCase().match(/\w+/g), page, function (e) {
-  assert(!e)
-})
-```
-
-#### `stream` get(`int`/`string`: value)
-
-```js
-index.get('aliquam').on('data', function (data) {
-  console.log('aliquam is included in ', data.value)
-  expect(data.key).to.equal('aliquam')
-  expect(data.value).to.include(1) //page 1
-})
-```
-
-#### `stream` all()
-
-```js
-index.all('aliquam').on('data', function (data) {
-  console.log(data.key, 'is included in ', data.value)
-})
-```
-
-#### `void` del(`array`: values, `int`/`string`: key, `function`: callback)
-
-```js
-var text = 'Morbi elit est, blandit eu aliquam nec, malesuada ut turpis.'
-var page = 1
-
-index.del(text.toLowerCase().match(/\w+/g), page, function (e) {
-  assert(!e)
-})
-```
-
-#### `stream` startsWith(`int`/`string`: value)
-
-```js
-index.startsWith('e', function (data) {
-  console.log(data.key, 'starts with e')
-})
-```
-
-#### `void` close(`function`: callback)
-
-```js
-index.close(function (e) {
-  assert(!e)
-})
-```
 
 ## license
 
-MIT
+level:
+```
+starting: INDEX*10000
+total: 174.548880147
+mean: 0.0174548880147
+median: 0.014623746000000002
+variance: 83115.24417706014
+standard deviation: 0.009116756231086808
+50th percentile: 0.014623746000000002
+60th percentile: 0.016834534
+70th percentile: 0.019390802000000002
+80th percentile: 0.022664774500000002
+90th percentile: 0.029108222000000003
+99th percentile: 0.048581740500000005
+```
+
+level-mem:
+```
+starting: INDEX*10000
+total: 164.937229312
+mean: 0.0164937229312
+median: 0.013814405500000002
+variance: 63321.43682122216
+standard deviation: 0.007957476787350507
+50th percentile: 0.013814405500000002
+60th percentile: 0.015885996500000003
+70th percentile: 0.018437032500000002
+80th percentile: 0.0214210905
+90th percentile: 0.026700557000000003
+99th percentile: 0.044352254
+```
+
+level-basho:
+```
+starting: INDEX*10000
+total: 169.774637907
+mean: 0.0169774637907
+median: 0.013961458000000001
+variance: 91397.36846204386
+standard deviation: 0.0095601970932635
+50th percentile: 0.013961458000000001
+60th percentile: 0.0162440165
+70th percentile: 0.0189158045
+80th percentile: 0.021980015000000002
+90th percentile: 0.0284258585
+99th percentile: 0.0479272025
+```
