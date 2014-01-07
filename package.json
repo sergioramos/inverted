@@ -1,7 +1,7 @@
 {
   "name": "inverted-index",
   "version": "0.0.1",
-  "description": "full-text search engine for level with pagination, sift3/cosine distance and tf-idf ranking",
+  "description": "inverted-index for level with pagination, sift3/cosine distance and tf-idf ranking",
   "keywords": [],
   "homepage": "https://github.com/kordon/inverted-index",
   "bugs": {
