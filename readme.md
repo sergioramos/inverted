@@ -156,9 +156,9 @@ You can then query "Johnnie" with `facets` `["brand"]` and only get:
 ```json
 ["b"]
 ```
-Notice how the result don't include the user `3` because it doesn't have the *"brand"* `facet`.
+Notice how the result don't include the user `3` because it doesn't have the *brand* `facet`.
 
-You can also combine `facets` with `ids` to provide property based queries:
+You can also combine `facets` with `id`'s to provide property based queries:
 ```json
 {
   "3": {
@@ -181,4 +181,99 @@ And then query the `facets` `["user-name"]` with the text *"johnnie"* and get:
 ```
 And with that you can just split the results to get the `id`'s.
 
+#### getter
+
+For ranking results, we need to store the original text. When indexing large amounts of data this can have an impact on disk usage. To prevent that, a function can be passed that receives `id`, `options`, and `callback` as the arguments to fetch the original indexed text for that `id`.
+
+### index(text, id[, facets], callback)
+### put(text, id[, facets], callback)
+### link(text, id[, facets], callback)
+```js
+index.index('john green', 1, ['user'], function(err){
+  assert(!err)
+})
+```
+```js
+index.put('Fishing is a way of catching cats, he argued in his arguments', 'b', function(err){
+  assert(!err)
+})
+```
+```js
+index.link('Julie loves me more than Linda loves me', '1436ebc684b-c1039c76bdb2b054670f3a1256c98650', ['message'], function(err){
+  assert(!err)
+})
+```
+
+### remove(id, callback)
+### del(id, callback)
+### unlink(id, callback)
+```js
+index.remove(1, function(err){
+  assert(!err)
+})
+```
+```js
+index.del('b', function(err){
+  assert(!err)
+})
+```
+```js
+index.unlink('1436ebc684b-c1039c76bdb2b054670f3a1256c98650', function(err){
+  assert(!err)
+})
+```
+
+### index.search(query[, facets[, options]], callback)
+### index.query(query[, facets[, options]], callback)
+```js
+index.search('Fishing', function(err, result){
+  assert(!err)
+  assert(result.last)
+  assert(result.results)
+})
+```
+```js
+index.query('Green', ['user'], function(err, result){
+  assert(!err)
+  assert(result.last)
+  assert(result.results)
+})
+```
+```js
+index.search('Green', 'user', function(err, result){
+  assert(!err)
+  assert(result.last)
+  assert(result.results)
+})
+```
+```js
+index.search('Green', {
+  limit: 100, 
+  ttl: 1000 * 60 * 60
+}, function(err, result){
+  assert(!err)
+  assert(result.last)
+  assert(result.results)
+})
+```
+```js
+index.search({
+  last: '1436ec2e069-bf55e1ed64540b925e13d6bfd21a543c'
+}, function(err, result){
+  assert(!err)
+  assert(result.last)
+  assert(result.results)
+})
+```
+
+#### pagination
+
+Every query returns a last parameter. That can be passed to the `query`/`search` function to get the next results. When you pass `last`, you don't need to pass the search query again, because it is saved in the db.
+
+Note that pagination expires in `1h`, so if you do a query now, and 2 hours later you want to retrieve the next page, you'll get an error.
+
+The `ttl` can, however, be tuned in the `query` options.
+
 ## license
+
+MIT

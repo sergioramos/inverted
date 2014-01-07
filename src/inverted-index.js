@@ -243,7 +243,7 @@ inverted.prototype.remove = function(id, fn){
   }
 }
 
-inverted.prototype.search = function(query, facets, fn){
+inverted.prototype.search = function(query, facets, options, fn){
   if(arguments.length < 2){
     throw new Error('query and callback arguments required')
   }
