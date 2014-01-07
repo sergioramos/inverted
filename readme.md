@@ -46,7 +46,7 @@ Any [level](https://github.com/rvagg/node-levelup/) API-compatible instance is a
 
 ##### idf
 
-When `idf` is flagged as true, for each token indexed an `idf` ([term frequency–inverse document frequency](http://en.wikipedia.org/wiki/Tf%E2%80%93idf)) is calculated. When querying, the index, the terms with lowest `idf` are fetched first. Example:
+When `idf` is flagged as true, for each token indexed an `idf` ([term frequency–inverse document frequency](http://en.wikipedia.org/wiki/Tf%E2%80%93idf)) is calculated. When querying the index, the terms with lowest `idf` are fetched first. Example:
 
 ```js
 "Julie loves me more than Linda loves me"
@@ -54,16 +54,16 @@ When `idf` is flagged as true, for each token indexed an `idf` ([term frequency�
 ```json
 [
   {
+    "word": "loves",
+    "idf": 1.0986122886681098
+  },
+  {
     "word": "julie",
     "idf": 1.791759469228055
   },
   {
     "word": "linda",
     "idf": 1.791759469228055
-  },
-  {
-    "word": "loves",
-    "idf": 1.0986122886681098
   }
 ]
 ```
