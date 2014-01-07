@@ -129,4 +129,56 @@ Only takes effect when `rank` is set to true. Valid options are `cosine` or `sif
 
 Haven't made any benchmarks on that, but `sift3` _should_ be faster. Will get data on that soon.
 
+##### facets
+
+Enabling `facets` is useful to query based on types of models. Example:
+```json
+{
+  "1": {
+    "text": "Hank Green",
+    "facets": ["user"]
+  },
+  "2": {
+    "text": "John Green",
+    "facets": ["user"]
+  },
+  "3": {
+    "text": "Johnnie Walker",
+    "facets": ["user"]
+  },
+  "b": {
+    "text": "Johnnie Walker",
+    "facets": ["brand"]
+  }
+}
+```
+You can then query "Johnnie" with `facets` `["brand"]` and only get:
+```json
+["b"]
+```
+Notice how the result don't include the user `3` because it doesn't have the *"brand"* `facet`.
+
+You can also combine `facets` with `ids` to provide property based queries:
+```json
+{
+  "3": {
+    "text": "Johnnie Walker johnnie@walker.com",
+    "facets": ["user"]
+  },
+  "3-name": {
+    "text": "Johnnie Walker",
+    "facets": ["user-name"]
+  },
+  "3-email": {
+    "text": "johnnie@walker.com",
+    "facets": ["user-email"]
+  }
+}
+```
+And then query the `facets` `["user-name"]` with the text *"johnnie"* and get:
+```json
+["3-name"]
+```
+And with that you can just split the results to get the `id`'s.
+
 ## license
