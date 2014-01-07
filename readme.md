@@ -123,4 +123,10 @@ and then rank them:
 ["2", "1"]
 ```
 
+##### rank_algorithm
+
+Only takes effect when `rank` is set to true. Valid options are `cosine` or `sift3` using [ramitos/cosine](https://github.com/ramitos/cosine) and [ramitos/sift3](https://github.com/ramitos/sift3).
+
+Haven't made any benchmarks on that, but `sift3` _should_ be faster. Will get data on that soon.
+
 ## license
