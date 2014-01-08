@@ -45,7 +45,7 @@ module.exports = function(){
         if(err) return fn(err)
         assert(expected.keys.length === keys.length)
         assert(keys.filter(function(key){
-          return !!~expected.keys.indexOf(key[0])
+          return expected.keys.indexOf(key[0]) >= 0
         }).length === keys.length)
         fn()
       })

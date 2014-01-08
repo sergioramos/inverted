@@ -4,7 +4,7 @@ var expected = require('../data/!idf-stem-rank-!facets.json')
 var options = {
   idf: false,
   stem: true,
-  rank: true,
+  rank: false,
   facets: false
 }
 
@@ -45,7 +45,7 @@ module.exports = function(){
         if(err) return fn(err)
         assert(expected.keys.length === keys.length)
         assert(keys.filter(function(key){
-          return !!~expected.keys.indexOf(key[0])
+          return expected.keys.indexOf(key[0]) >= 0
         }).length === keys.length)
         fn()
       })
@@ -70,24 +70,6 @@ module.exports = function(){
           assert(result.results.length === 1)
           fn()
         })
-      })
-    })
-
-    it('with ttl', function(fn){
-      text.query('Node.js', {
-        limit: 1,
-        ttl: 10
-      }, function(err, result){
-        assert(!err)
-        setTimeout(function(){
-          text.query({
-            last: result.last
-          }, function(err, result){
-            assert(err)
-            assert(err.type === 'NotFoundError')
-            fn()
-          })
-        }, 10500)
       })
     })
 
