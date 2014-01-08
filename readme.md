@@ -1,9 +1,9 @@
 # inverted-index
 
 [![NPM version](https://badge.fury.io/js/inverted-index.png)](http://badge.fury.io/js/inverted-index)
-[![Build Status](https://travis-ci.org/kordon/inverted.png?branch=master)](https://travis-ci.org/kordon/inverted)
-[![Dependency Status](https://gemnasium.com/kordon/inverted.png)](https://gemnasium.com/kordon/inverted)
-[![Coverage Status](https://coveralls.io/repos/kordon/inverted/badge.png)](https://coveralls.io/r/kordon/inverted)
+[![Build Status](https://travis-ci.org/ramitos/inverted.png?branch=master)](https://travis-ci.org/ramitos/inverted)
+[![Dependency Status](https://gemnasium.com/ramitos/inverted.png)](https://gemnasium.com/ramitos/inverted)
+[![Coverage Status](https://coveralls.io/repos/ramitos/inverted/badge.png)](https://coveralls.io/r/ramitos/inverted)
 
 ## install
 
