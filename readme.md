@@ -16,7 +16,7 @@ npm install [--save/--save-dev] inverted-index
 ## api
 
 ```js
-var inverted = require('inverted')
+var inverted = require('inverted-index')
 ```
 
 ### inverted(db[, options[, getter]])
