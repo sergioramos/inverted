@@ -75,9 +75,13 @@ var inverted = module.exports = function(db, options, getter){
     this.paths.wo_facet = path(':word/:id')
   }
 
-  if(this.options.facets){
+  if(this.options.facets && !this.options.idf){
+    this.paths.by_id = path(':id/:word/:facet')
+  } else if(!this.options.facets && !this.options.idf){
+    this.paths.by_id = path(':id/:word')
+  } else if(this.options.facets && this.options.idf){
     this.paths.by_id = path(':id/:word/:idf/:facet')
-  } else {
+  } else if(!this.options.facets && this.options.idf){
     this.paths.by_id = path(':id/:word/:idf')
   }
 
@@ -333,8 +337,10 @@ inverted.prototype.search = function(query, facets, options, fn){
   function onWord(facet){
     return function(word, fn){
       var start = interpolate('word/%s', word)
-      start += facet.length ? interpolate('/facet/%s', facet) : '/idf'
+      start += facet.length ? interpolate('/facet/%s', facet) : ''
+      start += self.options.idf ? '/idf' : ''
       var end = start + '/\xff'
+      start += '/'
 
       onRange(xtend(dbOpts, {
         start: start,
