@@ -8,12 +8,13 @@ var options = {
   facets: false
 }
 
+var inverted = process.env.INVERTED_COV ? require('../../lib-cov/inverted-index') : require('../../')
 var timehat = require('timehat')
 var level = require('level')(__dirname + '/../dbs/db-' + timehat())
 var async = require('async')
 var assert = require('assert')
 
-var text = require('../../')(level, options, function(id, fn){
+var text = inverted(level, options, function(id, fn){
   fn(null, documents[id].text)
 })
 
@@ -125,7 +126,7 @@ module.exports = function(){
       text.remove('2', fn)
     })
 
-    it('should not have andy keys from removed id', function(fn){
+    it('should not have any keys from removed id', function(fn){
       getAllKeys(function(err, keys){
         assert(!err)
         assert(expected.keys.length !== keys.length)
