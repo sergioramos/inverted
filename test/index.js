@@ -1,10 +1,11 @@
-describe('idf-stem-rank-facets', require('./specs/idf-stem-rank-facets.js'))
-describe('idf-stem-rank-!facets', require('./specs/idf-stem-rank-!facets.js'))
-describe('idf-stem-!rank-facets', require('./specs/idf-stem-!rank-facets.js'))
-describe('idf-stem-!rank-!facets', require('./specs/idf-stem-!rank-!facets.js'))
-describe('idf-!stem-rank-facets', require('./specs/idf-!stem-rank-facets.js'))
-describe('idf-!stem-rank-!facets', require('./specs/idf-!stem-rank-!facets.js'))
-describe('idf-!stem-!rank-facets', require('./specs/idf-!stem-!rank-facets.js'))
+// describe('idf-stem-rank-facets', require('./specs/idf-stem-rank-facets.js'))
+// describe('idf-stem-rank-!facets', require('./specs/idf-stem-rank-!facets.js'))
+// describe('idf-stem-!rank-facets', require('./specs/idf-stem-!rank-facets.js'))
+// describe('idf-stem-!rank-!facets', require('./specs/idf-stem-!rank-!facets.js'))
+// describe('idf-!stem-rank-facets', require('./specs/idf-!stem-rank-facets.js'))
+// describe('idf-!stem-rank-!facets', require('./specs/idf-!stem-rank-!facets.js'))
+// describe('idf-!stem-!rank-facets', require('./specs/idf-!stem-!rank-facets.js'))
+describe('idf-!stem-!rank-!facets', require('./specs/idf-!stem-!rank-!facets.js'))
 //
 // var documents = require('./documents.json')
 //
