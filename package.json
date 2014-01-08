@@ -47,8 +47,8 @@
     "stats-lite": "~1.0.0",
     "mocha-lcov-reporter": "0.0.x",
     "jscoverage": "0.3.x",
-    "coveralls": "2.5.x",
-    "mocha": "1.14.x"
+    "coveralls": "2.6.x",
+    "mocha": "1.16.x"
   },
   "engines": {
     "node": ">=0.8"
