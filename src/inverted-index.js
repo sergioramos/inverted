@@ -293,6 +293,10 @@ inverted.prototype.search = function(query, facets, options, fn){
     options = {}
   }
 
+  if(!self.options.facets){
+    facets = ['']
+  }
+
   facets = self.parseFacets(facets)
   options = xtend(default_search_options, options)
 
