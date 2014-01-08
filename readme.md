@@ -3,9 +3,9 @@ WIP
 # inverted-index
 
 [![NPM version](https://badge.fury.io/js/inverted-index.png)](http://badge.fury.io/js/inverted-index)
-[![Build Status](https://secure.travis-ci.org/kordon/inverted-index.png)](http://travis-ci.org/kordon/inverted-index)
-[![Dependency Status](https://gemnasium.com/kordon/inverted-index.png)](https://gemnasium.com/kordon/inverted-index)
-[![Coverage Status](https://coveralls.io/repos/kordon/inverted-index/badge.png?branch=master)](https://coveralls.io/r/kordon/inverted-index?branch=master)
+[![Build Status](https://travis-ci.org/kordon/inverted.png?branch=master)](https://travis-ci.org/kordon/inverted)
+[![Dependency Status](https://gemnasium.com/kordon/inverted.png)](https://gemnasium.com/kordon/inverted)
+[![Coverage Status](https://coveralls.io/repos/kordon/inverted/badge.png)](https://coveralls.io/r/kordon/inverted)
 
 ## install
 
