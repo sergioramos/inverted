@@ -5,14 +5,18 @@
 // describe('idf-!stem-rank-facets', require('./specs/idf-!stem-rank-facets.js'))
 // describe('idf-!stem-rank-!facets', require('./specs/idf-!stem-rank-!facets.js'))
 // describe('idf-!stem-!rank-facets', require('./specs/idf-!stem-!rank-facets.js'))
-describe('idf-!stem-!rank-!facets', require('./specs/idf-!stem-!rank-!facets.js'))
-//
+// describe('idf-!stem-!rank-!facets', require('./specs/idf-!stem-!rank-!facets.js'))
+// describe('!idf-stem-rank-facets', require('./specs/!idf-stem-rank-facets.js'))
+// describe('!idf-stem-rank-!facets', require('./specs/!idf-stem-rank-!facets.js'))
+// describe('!idf-stem-!rank-facets', require('./specs/!idf-stem-!rank-facets.js'))
+describe('!idf-stem-!rank-!facets', require('./specs/!idf-stem-!rank-!facets.js'))
+
 // var documents = require('./documents.json')
 //
 // var options = {
-//   idf: true,
-//   stem: false,
-//   rank: false,
+//   idf: false,
+//   stem: true,
+//   rank: true,
 //   facets: true
 // }
 //
@@ -35,12 +39,21 @@ describe('idf-!stem-!rank-!facets', require('./specs/idf-!stem-!rank-!facets.js'
 // index(function(err){
 //   if(err) throw err
 //   debugger
-//   text.query('webos', 'article', function(err, result){
+//   text.query('Node.js', {
+//     limit: 1
+//   }, function(err, result){
 //     assert(!err)
-//     assert(result.last.length)
-//     console.log(result.results)
-//     assert(result.results.length === 2)
-//     assert(!!~result.results.indexOf('4'))
-//     assert(!!~result.results.indexOf('5'))
+//     assert(result.results.length === 1)
+//     var first = result.results[0]
+//     text.query({
+//       last: result.last
+//     }, {
+//       limit: 1
+//     }, function(err, result){
+//       if(err) throw err
+//       assert(result.results[0] !== first)
+//       assert(result.results.length === 1)
+//       process.exit()
+//     })
 //   })
 // })
