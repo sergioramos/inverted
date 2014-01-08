@@ -64,8 +64,7 @@ var inverted = module.exports = function(db, options, getter){
   this.options = xtend(default_options, options)
 
   this.paths = {
-    text: path('text/:id'),
-    by_id: path(':id/:word/:idf/:facet')
+    text: path('text/:id')
   }
 
   if(this.options.idf){
@@ -74,6 +73,12 @@ var inverted = module.exports = function(db, options, getter){
   } else {
     this.paths.w_facet = path(':word/:facet/:id')
     this.paths.wo_facet = path(':word/:id')
+  }
+
+  if(this.options.facets){
+    this.paths.by_id = path(':id/:word/:idf/:facet')
+  } else {
+    this.paths.by_id = path(':id/:word/:idf')
   }
 
   if(type(getter) !== 'function'){
