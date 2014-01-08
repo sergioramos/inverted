@@ -38,12 +38,17 @@
     "timehat": "0.0.1",
     "level-ttl": "~0.5.0",
     "level-sublevel": "~5.2.0",
-    "cosine": "0.0.1"
+    "cosine": "0.0.1",
+    "stream-statistics": "0.0.1"
   },
   "devDependencies": {
     "level": "~0.18.0",
     "longjohn": "~0.2.2",
-    "stats-lite": "~1.0.0"
+    "stats-lite": "~1.0.0",
+    "mocha-lcov-reporter": "0.0.x",
+    "jscoverage": "0.3.x",
+    "coveralls": "2.5.x",
+    "mocha": "1.14.x"
   },
   "engines": {
     "node": ">=0.8"

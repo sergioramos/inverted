@@ -17,6 +17,7 @@ var atomic = require('atomic')
 var xtend = require('xtend')
 var timehat = require('timehat')
 var ttl = require('level-ttl')
+var stats = require('stream-statistics')
 
 var tokenizer = new (natural.WordPunctTokenizer)()
 var stopwords = natural.stopwords
@@ -37,6 +38,11 @@ var default_options = {
   rank: true,
   rank_algorithm: 'cosine',
   facets: true
+}
+
+var default_search_options = {
+  limit: 100,
+  ttl: 1000 * 60 * 60
 }
 
 var algorithms = {
@@ -78,6 +84,7 @@ var inverted = module.exports = function(db, options, getter){
     }.bind(this)
   } else {
     this.getter = getter
+    this.has_getter = true
   }
 
   if(this.options.rank_algorithm !== 'cosine'){
@@ -89,6 +96,8 @@ var inverted = module.exports = function(db, options, getter){
       return algorithms.cosine(a, b)
     }.bind(this)
   }
+
+  this.stats = stats()
 }
 
 inverted.prototype.index = function(text, id, facets, fn){
@@ -106,6 +115,8 @@ inverted.prototype.index = function(text, id, facets, fn){
   var batch = self.db.batch()
   var words = self.parseText(text, true)
   facets = self.parseFacets(facets)
+
+  self.stats.write(words.length * facets.length)
 
   function onWord(word, fn){
     async.parallel([wFacet(word), woFacet(word)], fn)
@@ -142,13 +153,15 @@ inverted.prototype.index = function(text, id, facets, fn){
 
   function addWFacet(word, facet, path){
     return function(fn){
-      if(!facet.length) return fn()
-      batch.put(path({
+      var key = path({
         word: word.word,
         idf: bytewise.encode(word.idf).toString('hex'),
         id: id,
         facet: facet
-      }), id, dbOpts)
+      })
+
+      if(!facet.length && !key.match(/^id\//)) return fn()
+      batch.put(key, id, dbOpts)
       fn()
     }
   }
@@ -161,9 +174,16 @@ inverted.prototype.index = function(text, id, facets, fn){
   function hasResource(done){
     fn = self.factorFn(done, fn)
 
-    batch.put(self.paths.text({
-      id: id
-    }), text, dbOpts)
+    if(!self.has_getter){
+      batch.put(self.paths.text({
+        id: id
+      }), {
+        text: text,
+        words: words
+      }, xtend(dbOpts, {
+        valueEncoding: 'json'
+      }))
+    }
 
     async.forEach(words, onWord, write)
   }
@@ -215,7 +235,7 @@ inverted.prototype.remove = function(id, fn){
     var ctx = self.parseKey(key)
     batch.del(key, dbOpts)
 
-    if(!self.getter){
+    if(!self.has_getter){
       batch.del(self.paths.text({
         id: ctx.id
       }))
@@ -244,33 +264,50 @@ inverted.prototype.remove = function(id, fn){
 }
 
 inverted.prototype.search = function(query, facets, options, fn){
+  var self = this
+
   if(arguments.length < 2){
     throw new Error('query and callback arguments required')
+  }
+
+  if(!Array.isArray(facets) && (type(facets) === 'object')){
+    var mid = options
+    options = facets
+    fn = mid
+    facets = []
   }
 
   if(type(facets) === 'function'){
     fn = facets
     facets = ['']
+    options = {}
   }
 
-  var lasts = []
+  if(type(options) === 'function'){
+    fn = options
+    options = {}
+  }
+
+  facets = self.parseFacets(facets)
+  options = xtend(default_search_options, options)
+
+  var limit = Math.ceil(self.stats.mean() * facets.length)
+  var ranges = []
   var keys = []
-  var last = {key: '', keys: []}
   var text = ''
-  var self = this
+  var last = ''
+  var found = 0
+  var ids = []
+
 
   if(type(query) === 'string'){
     text = query
   }
 
   if(type(query) === 'object'){
-    last.key = query.last || ''
-    text = query.query
+    last = query.last || ''
+    text = query.text || ''
   }
-
-  var words = self.parseText(text)
-  facets = self.parseFacets(facets)
-  var limit = 100 / words.length / facets.length
 
   function onFacet(facet, fn){
     async.map(words, onWord(facet), fn)
@@ -278,7 +315,7 @@ inverted.prototype.search = function(query, facets, options, fn){
 
   function onError(results, transformer, fn){
     return function(err){
-      results.end()
+      results.destroy()
       transformer.end()
       fn(err)
     }
@@ -289,40 +326,68 @@ inverted.prototype.search = function(query, facets, options, fn){
       var start = interpolate('word/%s', word)
       start += facet.length ? interpolate('/facet/%s', facet) : '/idf'
       var end = start + '/\xff'
-      var last = ''
 
-      var range = xtend(dbOpts, {
+      onRange(xtend(dbOpts, {
         start: start,
         end: end,
         limit: limit
-      })
-
-      var results = self.db.createKeyStream(range)
-
-      var transformer = through(objectMode, function(key, enc, fn){
-        last = key
-        keys.push(key)
-        fn()
-      }, function(){
-        range.start = last
-        lasts.push(range)
-        fn()
-      })
-
-      var gotError = onError(results, transformer, fn)
-      results.on('error', gotError)
-      transformer.on('error', gotError)
-      results.pipe(transformer)
+      }), fn)
     }
+  }
+
+  function onRange(range, fn){
+    var results = self.db.createKeyStream(range)
+    var ended = false
+    var last = ''
+
+    function end(fn){
+      results.destroy()
+      transformer.end()
+      fn()
+    }
+
+    var transformer = through(objectMode, function(key, enc, fn){
+      if(ended){
+        return
+      }
+
+      last = key
+      key = self.parseKey(key, true)
+
+      if(!!~ids.indexOf(key.id)){
+        return fn()
+      }
+
+      if(found < options.limit){
+        ids.push(key.id)
+        keys.push(key)
+        found += 1
+      }
+
+      if(found >= options.limit){
+        ended = true
+        end(fn)
+        return
+      }
+
+      fn()
+    }, function(){
+      range.start = last
+      ranges.push(range)
+      fn()
+    })
+
+    var gotError = onError(results, transformer, fn)
+    results.on('error', gotError)
+    transformer.on('error', gotError)
+    results.pipe(transformer)
   }
 
   function gather(err){
     if(err) return fn(err)
     var docs = {}
 
-    keys = keys.map(function(key){
-      return self.parseKey(key, true)
-    }).sort(function(a, b){
+    keys = keys.sort(function(a, b){
       return a.idf - b.idf
     })
 
@@ -351,9 +416,12 @@ inverted.prototype.search = function(query, facets, options, fn){
       last: function(fn){
         var id = timehat()
 
-        self.ttl_db.put(id, lasts, xtend(dbOpts, {
+        self.ttl_db.put(id, {
+          ids: ids,
+          ranges: ranges
+        }, xtend(dbOpts, {
           valueEncoding: 'json',
-          ttl: 1000 * 60 * 60
+          ttl: options.ttl
         }),function(err){
           fn(err, id)
         })
@@ -361,6 +429,19 @@ inverted.prototype.search = function(query, facets, options, fn){
     }, fn)
   }
 
+  function onPage(err, page){
+    if(err) return fn(err)
+    ids = page.ids
+    async.map(page.ranges, onRange, gather)
+  }
+
+  if(last){
+    return self.ttl_db.get(last, xtend(dbOpts, {
+      valueEncoding: 'json'
+    }), onPage)
+  }
+
+  var words = self.parseText(text)
   async.map(facets, onFacet, gather)
 }
 
@@ -370,7 +451,12 @@ inverted.prototype.rank = function(query, docs, fn){
 
   function sort(err, texts){
     if(err) return fn(err)
+
     fn(err, texts.map(function(text, i){
+      if(type(text) === 'object'){
+        return [ids[i], self.algorithm(text.words, query)]
+      }
+
       return [ids[i], self.algorithm(text, query)]
     }).sort(function(a, b){
       return b[1] - a[1]
@@ -390,7 +476,6 @@ inverted.prototype.factorFn = function(done, fn){
 }
 
 inverted.prototype.parseText = function(text, idf){
-  var self = this
   var ocurrences = {}
   var idfs = {}
 
@@ -404,7 +489,7 @@ inverted.prototype.parseText = function(text, idf){
     return word.toLowerCase()
   }).filter(Boolean)
 
-  if(self.options.stem) words = words.map(function(word){
+  if(this.options.stem) words = words.map(function(word){
     return stemmer.stem(word)
   })
 
