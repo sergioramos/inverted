@@ -300,7 +300,7 @@ inverted.prototype.search = function(query, facets, options, fn){
   facets = self.parseFacets(facets)
   options = xtend(default_search_options, options)
 
-  var limit = Math.ceil(self.stats.mean() * facets.length)
+  var limit = Math.ceil(self.stats.max() * facets.length)
   var ranges = []
   var keys = []
   var text = ''
