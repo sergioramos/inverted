@@ -1,5 +1,3 @@
-WIP
-
 # inverted-index
 
 [![NPM version](https://badge.fury.io/js/inverted-index.png)](http://badge.fury.io/js/inverted-index)
