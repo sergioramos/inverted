@@ -1,11 +1,17 @@
 describe('idf-stem-rank-facets', require('./specs/idf-stem-rank-facets.js'))
 describe('idf-stem-rank-!facets', require('./specs/idf-stem-rank-!facets.js'))
+describe('idf-stem-!rank-facets', require('./specs/idf-stem-!rank-facets.js'))
+describe('idf-stem-!rank-!facets', require('./specs/idf-stem-!rank-!facets.js'))
+describe('idf-!stem-rank-facets', require('./specs/idf-!stem-rank-facets.js'))
+describe('idf-!stem-rank-!facets', require('./specs/idf-!stem-rank-!facets.js'))
+describe('idf-!stem-!rank-facets', require('./specs/idf-!stem-!rank-facets.js'))
+//
 // var documents = require('./documents.json')
 //
 // var options = {
 //   idf: true,
-//   stem: true,
-//   rank: true,
+//   stem: false,
+//   rank: false,
 //   facets: true
 // }
 //
@@ -28,12 +34,12 @@ describe('idf-stem-rank-!facets', require('./specs/idf-stem-rank-!facets.js'))
 // index(function(err){
 //   if(err) throw err
 //   debugger
-//   text.remove('2', function(err){
+//   text.query('webos', 'article', function(err, result){
 //     assert(!err)
-//     text.query('vehicula', function(err, result){
-//       assert(!err)
-//       console.log(result.results)
-//       assert(!result.results.length)
-//     })
+//     assert(result.last.length)
+//     console.log(result.results)
+//     assert(result.results.length === 2)
+//     assert(!!~result.results.indexOf('4'))
+//     assert(!!~result.results.indexOf('5'))
 //   })
 // })
