@@ -455,6 +455,10 @@ inverted.prototype.search = function(query, facets, options, fn){
 }
 
 inverted.prototype.rank = function(query, docs, fn){
+  if(!this.options.rank){
+    return fn(null, Object.keys(docs))
+  }
+
   var self = this
   var ids = Object.keys(docs)
 
