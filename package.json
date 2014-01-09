@@ -45,7 +45,7 @@
     "level": "~0.18.0",
     "longjohn": "~0.2.2",
     "stats-lite": "~1.0.0",
-    "mocha-lcov-reporter": "StevenLooman/mocha-lcov-reporter",
+    "mocha-lcov-reporter": "0.0.x",
     "jscoverage": "0.3.x",
     "coveralls": "2.6.x",
     "mocha": "1.16.x"
