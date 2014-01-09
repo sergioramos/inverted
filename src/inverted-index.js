@@ -68,10 +68,10 @@ var inverted = module.exports = function(db, options, getter){
   }
 
   if(this.options.idf){
-    this.paths.w_facet = path(':word/:facet/:idf/:id')
+    this.paths.w_facet = path(':facet/:word/:idf/:id')
     this.paths.wo_facet = path(':word/:idf/:id')
   } else {
-    this.paths.w_facet = path(':word/:facet/:id')
+    this.paths.w_facet = path(':facet/:word/:id')
     this.paths.wo_facet = path(':word/:id')
   }
 
@@ -170,6 +170,7 @@ inverted.prototype.index = function(text, id, facets, fn){
       })
 
       if(!facet.length && !key.match(/^id\//)) return fn()
+
       batch.put(key, id, dbOpts)
       fn()
     }
@@ -336,16 +337,22 @@ inverted.prototype.search = function(query, facets, options, fn){
 
   function onWord(facet){
     return function(word, fn){
-      var start = interpolate('word/%s', word)
-      start += facet.length ? interpolate('/facet/%s', facet) : ''
-      start += self.options.idf ? '/idf' : ''
-      var end = start + '/\xff'
-      start += '/'
+      var start = ''
+
+      if(self.options.facets && facet.length){
+        start += interpolate('facet/%s', facet)
+        start += interpolate('/word/%s', word)
+      }
+
+      if(!self.options.facets || !facet.length){
+        start += interpolate('word/%s', word)
+      }
 
       onRange(xtend(dbOpts, {
         start: start,
-        end: end,
-        limit: limit
+        end: start + '\xff',
+        limit: limit,
+        word: word
       }), fn)
     }
   }
@@ -368,6 +375,10 @@ inverted.prototype.search = function(query, facets, options, fn){
 
       last = key
       key = self.parseKey(key, true)
+
+      if(key.word.indexOf(range.word) < 0){
+        return fn()
+      }
 
       if(!!~ids.indexOf(key.id)){
         return fn()
@@ -410,17 +421,17 @@ inverted.prototype.search = function(query, facets, options, fn){
       if(!docs[key.id]) {
         docs[key.id] = {
           collectiveIDF: Infinity,
-          results: [],
+          idfs: [],
           id: key.id
         }
       }
 
-      docs[key.id].results.push(key)
+      docs[key.id].idfs.push(key.idf)
     })
 
     Object.keys(docs).forEach(function(id){
-      docs[id].collectiveIDF = docs[id].results.reduce(function(sum, key){
-        return sum + key.idf
+      docs[id].collectiveIDF = docs[id].idfs.reduce(function(sum, idf){
+        return sum + idf
       }, 0)
     })
 
@@ -484,7 +495,9 @@ inverted.prototype.rank = function(query, docs, fn){
     }))
   }
 
-  async.map(ids, self.getter.bind(self), sort)
+  async.map(ids, function(id, fn){
+    self.getter(id, fn)
+  }, sort)
 }
 
 inverted.prototype.factorFn = function(done, fn){
