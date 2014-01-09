@@ -39,7 +39,9 @@ module.exports = function(){
   before(index)
 
   after(function(fn){
-    level.close(fn)
+    level.close(function(err){
+      fn(err)
+    })
   })
 
   describe('index', function(){
