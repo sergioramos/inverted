@@ -535,9 +535,7 @@ inverted.prototype.parseText = function(text, idf){
   })
 
   words = uniq(words).filter(function(word){
-    return !stopwords.some(function(stopword){
-      return word === stopword
-    })
+    return !stopwords.indexOf(word) >= 0
   })
 
   if(!idf) {
