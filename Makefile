@@ -2,7 +2,7 @@ REPORTER = spec
 UI = bdd
 
 test:
-	@NODE_ENV=test ./node_modules/.bin/mocha -u $(UI) -R $(REPORTER) -c -G -b -t 15000
+	@NODE_ENV=test ./node_modules/.bin/mocha -u $(UI) -R $(REPORTER) -c -b -t 15000
 
 lib-cov:
 	./node_modules/jscoverage/bin/jscoverage src lib-cov
