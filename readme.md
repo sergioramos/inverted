@@ -3,7 +3,7 @@
 [![NPM version](https://badge.fury.io/js/inverted-index.png)](http://badge.fury.io/js/inverted-index)
 [![Build Status](https://travis-ci.org/ramitos/inverted.png?branch=master)](https://travis-ci.org/ramitos/inverted)
 [![Dependency Status](https://gemnasium.com/ramitos/inverted.png)](https://gemnasium.com/ramitos/inverted)
-[![Coverage Status](https://coveralls.io/repos/ramitos/inverted/badge.png)](https://coveralls.io/r/ramitos/inverted)
+[![Coverage Status](https://coveralls.io/repos/ramitos/inverted/badge.png?branch=master)](https://coveralls.io/r/ramitos/inverted?branch=master)
 
 ## install
 
