@@ -1,6 +1,6 @@
 {
   "name": "inverted-index",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "inverted-index for level with pagination, sift3/cosine distance and tf-idf ranking",
   "keywords": [],
   "homepage": "https://github.com/ramitos/inverted-index",
@@ -36,7 +36,7 @@
     "atomic": "0.0.2",
     "xtend": "~2.1.2",
     "timehat": "0.0.1",
-    "level-ttl": "~0.5.0",
+    "level-ttl": "ramitos/node-level-ttl",
     "level-sublevel": "~5.2.0",
     "cosine": "0.0.1",
     "stream-statistics": "0.0.1"
