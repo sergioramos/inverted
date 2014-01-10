@@ -117,10 +117,10 @@ inverted.prototype.updateStats = function(){
     valueEncoding: 'json'
   }), function(err, stats){
     if(err) return
-    self.stats._min = stats.min
-    self.stats._max = stats.max
-    self.stats._mean = stats.mean
-    self.stats._sum = stats.sum
+    self.stats._min = stats.min || 0
+    self.stats._max = stats.max || 0
+    self.stats._mean = stats.mean || 0
+    self.stats._sum = stats.sum || 0
   })
 }
 
