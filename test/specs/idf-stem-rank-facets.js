@@ -181,4 +181,25 @@ module.exports = function(){
       })
     })
   })
+
+  describe('stats', function(){
+    it('should not have limit 0', function(fn){
+      var text = inverted(level, options, function(id, fn){
+        fn(null, documents[id].text)
+      })
+
+      setTimeout(function(){
+        text.query('webos', 'article', {
+          limit: 1,
+          ttl: 1
+        }, function(err, result){
+          assert(!err)
+          assert(result.last.length)
+          assert(result.results.length === 1)
+          assert(result.results[0] === '6')
+          fn()
+        })
+      }, 100)
+    })
+  })
 }

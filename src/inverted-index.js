@@ -107,6 +107,21 @@ var inverted = module.exports = function(db, options, getter){
   }
 
   this.stats = stats()
+  this.updateStats()
+}
+
+inverted.prototype.updateStats = function(){
+  var self = this
+
+  self.db.get('stats', xtend(dbOpts, {
+    valueEncoding: 'json'
+  }), function(err, stats){
+    if(err) return
+    self.stats._min = stats.min
+    self.stats._max = stats.max
+    self.stats._mean = stats.mean
+    self.stats._sum = stats.sum
+  })
 }
 
 inverted.prototype.index = function(text, id, facets, fn){
@@ -178,6 +193,16 @@ inverted.prototype.index = function(text, id, facets, fn){
 
   function write(err){
     if(err) return fn(err)
+
+    batch.put('stats', {
+      min: self.stats.min(),
+      max: self.stats.max(),
+      mean: self.stats.mean(),
+      sum: self.stats.sum()
+    }, xtend(dbOpts, {
+      valueEncoding: 'json'
+    }))
+
     batch.write(fn)
   }
 
@@ -376,11 +401,16 @@ inverted.prototype.search = function(query, facets, options, fn){
       last = key
       key = self.parseKey(key, true)
 
+      if(!key.word){
+        ended = true
+        end(fn)
+      }
+
       if(key.word.indexOf(range.word) < 0){
         return fn()
       }
 
-      if(!!~ids.indexOf(key.id)){
+      if(ids.indexOf(key.id) >= 0){
         return fn()
       }
 
