@@ -117,11 +117,24 @@ inverted.prototype.updateStats = function(){
     valueEncoding: 'json'
   }), function(err, stats){
     if(err) return
+    self.stats._n = stats.n || 0
     self.stats._min = stats.min || 0
     self.stats._max = stats.max || 0
-    self.stats._mean = stats.mean || 0
     self.stats._sum = stats.sum || 0
+    self.stats._mean = stats.mean || 0
   })
+}
+
+inverted.prototype.getStats = function(){
+  return {
+    n: self.stats.n(),
+    min: self.stats.min(),
+    max: self.stats.max(),
+    sum: self.stats.sum(),
+    mean: self.stats.mean(),
+    variance: self.stats.variance(),
+    standard_deviation: self.stats.standard_deviation()
+  }
 }
 
 inverted.prototype.index = function(text, id, facets, fn){
@@ -195,10 +208,11 @@ inverted.prototype.index = function(text, id, facets, fn){
     if(err) return fn(err)
 
     batch.put('stats', {
+      n: self.stats.n(),
       min: self.stats.min(),
       max: self.stats.max(),
-      mean: self.stats.mean(),
-      sum: self.stats.sum()
+      sum: self.stats.sum(),
+      mean: self.stats.mean()
     }, xtend(dbOpts, {
       valueEncoding: 'json'
     }))
@@ -330,7 +344,7 @@ inverted.prototype.search = function(query, facets, options, fn){
   facets = self.parseFacets(facets)
   options = xtend(default_search_options, options)
 
-  var limit = Math.ceil(self.stats.max() * facets.length)
+  var limit = Math.ceil(self.stats.max() * facets.length) || options.limit
   var ranges = []
   var keys = []
   var text = ''
