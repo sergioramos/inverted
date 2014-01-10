@@ -100,8 +100,8 @@ var inverted = module.exports = function(db, options, getter){
     this.algorithm = algorithms[this.options.rank_algorithm];
   } else {
     this.algorithm = function(a, b){
-      if(type(a) !== 'array') a = this.parseText(a)
-      if(type(b) !== 'array') b = this.parseText(b)
+      if(type(a) !== 'array') a = this.parseText(a, false, true)
+      if(type(b) !== 'array') b = this.parseText(b, false, true)
       return algorithms.cosine(a, b)
     }.bind(this)
   }
@@ -507,7 +507,7 @@ inverted.prototype.factorFn = function(done, fn){
   }
 }
 
-inverted.prototype.parseText = function(text, idf){
+inverted.prototype.parseText = function(text, idf, not_unique){
   var ocurrences = {}
   var idfs = {}
 
@@ -534,7 +534,7 @@ inverted.prototype.parseText = function(text, idf){
     idfs[word] = Math.log(arr.length / ocurrences[word])
   })
 
-  words = uniq(words).filter(function(word){
+  if(!not_unique) words = uniq(words).filter(function(word){
     return !stopwords.indexOf(word) >= 0
   })
 
