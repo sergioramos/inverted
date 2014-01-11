@@ -38,5 +38,11 @@
   "8-email": {
     "text": "johnnie@walker.com",
     "facets": ["user-email"]
+  },
+  "9": {
+    "text": "Sérgio Ramos"
+  },
+  "10": {
+    "text": 10
   }
 }

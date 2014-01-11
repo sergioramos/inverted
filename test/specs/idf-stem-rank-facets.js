@@ -46,20 +46,20 @@ module.exports = function(){
     })
   })
 
-  describe('index', function(){
-    it('should save the right keys', function(fn){
-      fn()
-      // getAllKeys(function(err, keys){
-      //   if(err) return fn(err)
-      //   assert(expected.keys.length === keys.length)
-      //   assert(keys.filter(function(key){
-      //     return expected.keys.indexOf(key[0]) >= 0
-      //   }).length === keys.length)
-      //   fn()
-      // })
-    })
-  })
-
+  // describe('index', function(){
+  //   it('should save the right keys', function(fn){
+  //     fn()
+  //     // getAllKeys(function(err, keys){
+  //     //   if(err) return fn(err)
+  //     //   assert(expected.keys.length === keys.length)
+  //     //   assert(keys.filter(function(key){
+  //     //     return expected.keys.indexOf(key[0]) >= 0
+  //     //   }).length === keys.length)
+  //     //   fn()
+  //     // })
+  //   })
+  // })
+  //
   describe('query', function(){
     it('with limit', function(fn){
       text.query('Node.js', {
@@ -151,6 +151,32 @@ module.exports = function(){
         assert(result.last.length)
         assert(result.results.length === 1)
         assert(result.results[0] === '6')
+        fn()
+      })
+    })
+
+    it('should work with diacritics', function(fn){
+      text.query('Sérgio', function(err, result){
+        assert(!err)
+        assert(result.last.length)
+        assert(result.results.length === 1)
+        assert(result.results[0] === '9')
+        text.query('Sergio', function(err, result){
+          assert(!err)
+          assert(result.last.length)
+          assert(result.results.length === 1)
+          assert(result.results[0] === '9')
+          fn()
+        })
+      })
+    })
+
+    it('should work with numbers', function(fn){
+      text.query(10, function(err, result){
+        assert(!err)
+        assert(result.last.length)
+        assert(result.results.length === 1)
+        assert(result.results[0] === '10')
         fn()
       })
     })

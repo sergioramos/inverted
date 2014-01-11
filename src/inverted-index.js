@@ -22,6 +22,7 @@ var stats = require('stream-statistics')
 var tokenizer = new (natural.WordPunctTokenizer)()
 var stopwords = natural.stopwords
 var stemmer = natural.PorterStemmer
+var diacritics = natural.removeDiacritics
 
 var dbOpts = {
   keyEncoding: 'utf8',
@@ -352,14 +353,11 @@ inverted.prototype.search = function(query, facets, options, fn){
   var found = 0
   var ids = []
 
-
-  if(type(query) === 'string'){
-    text = query
-  }
-
   if(type(query) === 'object'){
     last = query.last || ''
     text = query.text || ''
+  } else {
+    text = query
   }
 
   function onFacet(facet, fn){
@@ -552,33 +550,38 @@ inverted.prototype.factorFn = function(done, fn){
 }
 
 inverted.prototype.parseText = function(text, idf, not_unique){
+  var isNotString = false
   var ocurrences = {}
   var idfs = {}
+  var words = []
 
-  var words = tokenizer.tokenize(text).map(function(word){
-    return word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()\?]/g, '')
-  }).map(function(word){
-    return word.replace(/\s/g, '')
-  }).map(function(word){
-    return word.replace(/^[’—"']$/, '')
-  }).map(function(word){
-    return word.toLowerCase()
+  if(type(text) === 'string') words = tokenizer.tokenize(diacritics(text)).map(function(word){
+    word = word.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()\?]/g, '')
+    word = word.replace(/\s/g, '')
+    word = word.replace(/^[’—"']$/, '')
+    word = word.toLowerCase()
+    return word
   }).filter(Boolean)
 
   if(this.options.stem) words = words.map(function(word){
     return stemmer.stem(word)
   })
 
-  if(idf) words.forEach(function(word){
+  if(type(text) !== 'string'){
+    words.push(bytewise.encode(text).toString('hex'))
+    isNotString = true
+  }
+
+  if(idf && !isNotString) words.forEach(function(word){
     if(type(ocurrences[word]) === 'undefined') ocurrences[word] = 0
     ocurrences[word] += 1
   })
 
-  if(idf) Object.keys(ocurrences).forEach(function(word, i, arr){
+  if(idf && !isNotString) Object.keys(ocurrences).forEach(function(word, i, arr){
     idfs[word] = Math.log(arr.length / ocurrences[word])
   })
 
-  if(!not_unique) words = uniq(words).filter(function(word){
+  if(!not_unique && isNotString) words = uniq(words).filter(function(word){
     return !stopwords.indexOf(word) >= 0
   })
 
@@ -589,7 +592,7 @@ inverted.prototype.parseText = function(text, idf, not_unique){
   return words.map(function(word){
     return {
       word: word,
-      idf: idfs[word]
+      idf: !isNotString ? idfs[word] : 0
     }
   })
 }
