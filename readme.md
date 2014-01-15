@@ -5,7 +5,15 @@
 [![Dependency Status](https://gemnasium.com/ramitos/inverted.png)](https://gemnasium.com/ramitos/inverted)
 [![Coverage Status](https://coveralls.io/repos/ramitos/inverted/badge.png?branch=master)](https://coveralls.io/r/ramitos/inverted?branch=master)
 
-inverted-index for level with pagination, facets, sift3/cosine distance, tf-idf ranking, stopword removal, diactrics replacement and number support
+## features
+ * pagination
+ * facets
+ * sift3/cosine distance
+ * tf-idf ranking
+ * stopword removal
+ * stemming
+ * diactrics replacement
+ * number support
 
 ## install
 
