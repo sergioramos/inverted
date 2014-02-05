@@ -1,15 +1,15 @@
 {
   "name": "inverted-index",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "inverted-index for level with pagination, sift3/cosine distance and tf-idf ranking",
   "keywords": [],
-  "homepage": "https://github.com/ramitos/inverted-index",
+  "homepage": "https://github.com/ramitos/inverted",
   "bugs": {
-    "url": "http://github.com/ramitos/inverted-index/issues",
+    "url": "http://github.com/ramitos/inverted/issues",
     "email": "mail@sergioramos.me"
   },
   "license": {
-    "url": "https://raw.github.com/ramitos/inverted-index/master/license",
+    "url": "https://raw.github.com/ramitos/inverted/master/license",
     "type": "MIT"
   },
   "author": "Sérgio Ramos <mail@sergioramos.me> (http://sergioramos.me)",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ramitos/inverted-index.git"
+    "url": "git://github.com/ramitos/inverted.git"
   },
   "scripts": {
     "test": "make test test-coveralls"
